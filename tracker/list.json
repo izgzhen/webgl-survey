@@ -1,0 +1,458 @@
+{
+    "types" : [
+        "GLSL",
+        "Typo",
+        "unexpected parameter",
+        "Buffer not bound",
+        "Improper sharing",
+        "Lack of certain step",
+        "Memory leak",
+        "Name not in scope",
+        "Resource deallocation",
+        "Type error",
+        "missing properties",
+        "Undeclared identifier",
+        "Context management",
+        "Resource loading order",
+        "API usage error",
+        "Shader error",
+        "Threejs",
+        "Others",
+        "Type errors",
+        "Matrix related"
+    ],
+    "entries" : [
+        {
+            "name" : "threejs-pull-1602",
+            "source" : "threejs",
+            "categories" : ["GLSL"],
+            "link" : "https://github.com/mrdoob/three.js/pull/1602",
+            "remark" : "This PR mentioned a problem about adding precision\nqualifiers to resolve shader compilation errors on mobile device.\nThis is also a nasty problem which is platform-dependent"
+        },
+        {
+            "name" : "threejs-issue-1329",
+            "source" : "threejs",
+            "categories" : ["Typo"],
+            "link" : "https://github.com/mrdoob/three.js/issues/1329",
+            "remark" : "`THREE.UnsignedIntType` is written wrongly as `THREE.UnsignedShortType`.\nHowever, its namespace is `THREE`, which is defined by library, not by WebGL.",
+            "fix" : "I think TAJS might be able to resolve this by analyzing information of object property?"
+        },
+        {
+            "name" : "threejs-issue-4834",
+            "source" : "threejs",
+            "categories" : ["unexpected parameter"],
+            "link" : "https://github.com/mrdoob/three.js/issues/4834",
+            "remark" : "Discussed 2 problems here related to the compilation failure of the shader.\n\n                - [This commit](https://github.com/Nimanf/three.js/commit/7f7650c5e012890a34c26c1c6fa2f8482d855627) used `max()` to limit negative values for `pow()` in shaders.\n\n                - Then there is a discussion about the warning X3557 caused by `MAX_DIR_LIGHTS` is 1 and the redundant loop:\n                  ```\n                  #define MAX_DIR_LIGHTS 1\n                  #if MAX_DIR_LIGHTS > 0\n                  for( int i = 0; i < MAX_DIR_LIGHTS; i++ ) { ...\n                  ```",
+            "fix" : "maybe same as [threejs issue 5222](https://git.ustclug.org/VeriGL/VeriGL-Dark-Side/wikis/threejs-issue-5222)"
+        },
+        {
+            "name" : "threejs-issue-5098",
+            "source" : "threejs",
+            "categories" : ["Buffer not bound"],
+            "link" : "https://github.com/mrdoob/three.js/issues/5098",
+            "remark" : "An eye catched error.\n\n> `THREE.Float32Attribute` has been removed.\n\nUse THREE.BufferAttribute( array, itemSize ) instead.\n\nthis [commit](https://github.com/mrdoob/three.js/commit/e5b1d38e1e90bc9f7b16da7c1e53e66c5e8c2178) solves this:\n```\n- geometry.addAttribute( 'position', new THREE.Float32Attribute( numEdges * 2 * 3, 3 ) );\n+  geometry.addAttribute( 'position', new THREE.BufferAttribute( new Float32Array( numEdges * 2 * 3 ), 3 ) );\n```\n\n",
+            "fix" : "Search for available functions in the lib"
+        },
+        {
+            "name" : "threejs-issue-5196",
+            "source" : "threejs",
+            "categories" : ["Buffer not bound"],
+            "link" : "https://github.com/mrdoob/three.js/issues/5196#issue-40214568",
+            "remark" : "Found while playing with threejs.org/editor\n\nAfter adding a Mesh with the Menubar's 'Add' panel, sidebar geometry parameter changes cause the object to stop displaying.\n\nConsole warnings from WebGL:\n```\nWebGL: INVALID_OPERATION: vertexAttribPointer: no bound ARRAY_BUFFER three.min.js:545\nWebGL: INVALID_OPERATION: vertexAttribPointer: no bound ARRAY_BUFFER three.min.js:549\nWebGL: INVALID_OPERATION: drawElements: no ELEMENT_ARRAY_BUFFER bound three.min.js:552\n[17:54:37] Saved state to IndexedDB. 0.71ms Storage.js:64```",
+            "fix" : "Track the `gl` context and the `buffer` might avoid these."
+        },
+        {
+            "name" : "threejs-issue-5222",
+            "source" : "threejs",
+            "categories" : ["GLSL", "unexpected parameter"],
+            "link" : "https://github.com/mrdoob/three.js/issues/5222",
+            "remark" : "As referred to to [GLSL mannual](https://www.khronos.org/registry/gles/specs/2.0/GLSL_ES_Specification_1.0.17.pdf) P65, in `genType pow (genType x, genType y)`, results are undefined if x = 0 and y <= 0.\nSo in the generated GLSL in the issue, `pow(pointDotNormalHalf, shininess)` could be undefined and not warned.\nIn the commit [#7252](https://github.com/mrdoob/three.js/commit/a13cf4343effc741b0aa333c37062cc7cc3d71c7), this was fixed by:\n`-    uniforms.shininess.value = material.shininess;`\n`+    uniforms.shininess.value = Math.max( material.shininess, 1e-4 );`",
+            "related": [
+                "[messed up OBJMTL loader #7252](https://github.com/mrdoob/three.js/issues/7252)",
+                "[MeshPhongMaterial with shininess = 0 causes artifacts on Windows #6057](https://github.com/mrdoob/three.js/issues/6057)"
+            ],
+            "fix" : "Interval analysis and warning"
+        },
+        {
+            "name" : "threejs-issue-5269",
+            "source" : "threejs",
+            "categories" : ["Resource deallocation"],
+            "link" : "https://github.com/mrdoob/three.js/issues/5269",
+            "remark" : "The child of object3D was not removed before removing the object3D itself.\nThis arouse the memory leakage.",
+            "fix" : "Might be fixed by tracking the state of the object?"
+        },
+        {
+            "name" : "threejs-issue-5293",
+            "source" : "threejs",
+            "categories" : ["Lack of certain step"],
+            "link" : "https://github.com/mrdoob/three.js/issues/5293",
+            "remark" : "`WebGLRenderer` is not doing `updateObject( object )` because is not visible from the main camera.\nhen an error `glDrawElements: range out of bounds for buffer` would occur.",
+            "related" : [
+                "The author broke it again recently in [#6996](https://github.com/mrdoob/three.js/issues/6996)"
+            ],
+            "fix" : "Might be fixed by tracking the state of the object?"
+        },
+        {
+            "name" : "threejs-issue-5421",
+            "source" : "threejs",
+            "categories" : ["Buffer deallocation"],
+            "link" : "https://github.com/mrdoob/three.js/issues/5421",
+            "remark" : "According to the [commit](https://github.com/mrdoob/three.js/commit/70ca93c2fe184795e5410a6b30e625dee43af870), the problem is that we should not only call `_gl.deleteBuffer(buffer_obj)`, but also call `delete buffer_obj\n[Document about `deleteBuffer`](https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/deleteBuffer).",
+            "fix" : "The problem might cause the old state to persist unexpectedly. So one way of elimination is to require a \"fresh\" state explicitly at some point, which can preclude such presence if possible."
+        },
+        {
+            "name" : "threejs-issue-5569",
+            "source" : "threejs",
+            "categories" : ["Type error"],
+            "link" : "https://github.com/mrdoob/three.js/commit/1311c0e315326bdb9c02a5c7b8733bb0c27fb1ea",
+            "remark" : "[Commit](https://github.com/mrdoob/three.js/commit/1311c0e315326bdb9c02a5c7b8733bb0c27fb1ea).\nWell, it is recognised by naked eyes.\nBut first it is a silent bug, which is rather harmful. Second, although threejs doesn't depend on `gl-matrix.js`, it has a similar internal system",
+            "fix" : "Add additional type information"
+        },
+        {
+            "name" : "threejs-issue-5680",
+            "source" : "threejs",
+            "categories" : ["Memory leak"],
+            "link" : "https://github.com/mrdoob/three.js/issues/5680",
+            "remark" : "Fixed in [PR](https://github.com/mrdoob/three.js/pull/5723), with [commit](https://github.com/AVGP/three.js/commit/2518eaac07154bd466c4a7d18b819cc47f5ee0aa).\nThis is very nasty ... I can't give a reasonable fix now."
+        },
+        {
+            "name" : "threejs-issue-5871",
+            "source" : "threejs",
+            "categories" : ["Improper sharing"],
+            "link" : "https://github.com/mrdoob/three.js/issues/5871",
+            "remark" : "This is caused by the geometry being shared across contexts outside of the closure in `ArrowHelper`'s definition.\n[A length related discussion](https://github.com/mrdoob/three.js/pull/6723).",
+            "fix" : "Globally, we might be able to couple a context with a buffer."
+        },
+        {
+            "name" : "threejs-issue-6952",
+            "source" : "threejs",
+            "categories" : ["missing properties"],
+            "link" : "https://github.com/mrdoob/three.js/pull/6952",
+            "remark" : "When exporting `BoxGeometry` parameters(width, height, depth) by `SceneExporter`, it should be `g.parameters.width` rather than `g.width`.\nFixed by this [commit](https://github.com/dubejf/three.js/commit/b5b79a7a6aa4b42846f89e4852f36719543a3438).",
+            "related" : [
+                "SceneExporter doesn't handle box/sphere/plane parameters #4739",
+                "SceneExporter // BoxGeometry Inconsistent #5067",
+                "#5067 make SceneExporter use correct BoxGeometry parameters #5068"
+            ],
+            "fix" : "Track object's properties."
+        },
+        {
+            "name" : "threejs-issue-6956",
+            "source" : "threejs",
+            "categories" : ["GLSL"],
+            "link" : "https://github.com/mrdoob/three.js/issues/6956",
+            "remark" : "Pull: https://github.com/thothbot/parallax/pull/43\nIn GLSL, extension directive must occur before any non-preprocessor tokens, otherwise a warning is raised.\nThreejs fixed in 72dev.",
+            "related" : [
+                "[parallax](https://github.com/thothbot/parallax/pull/43)",
+                "[ancient-earth](https://github.com/typpo/ancient-earth/commit/91f9d75ab45db8e7ba3d2e156e313f079f6826ed)"
+            ]
+        },
+        {
+            "name" : "threejs-issues-83",
+            "source" : "threejs",
+            "categories" : ["Name not in scope"],
+            "link" : "https://github.com/mrdoob/three.js/issues/83",
+            "remark" : "The `scene` referenced isn't passed in as an argument or declared above - so it's looking in the global scope.\nSo it tends to be some programming style issue, which is related to the problem being solved.\n"
+        },
+        {
+            "name" : "threejs-pull-1602",
+            "source" : "threejs",
+            "categories" : ["GLSL"],
+            "link" : "https://github.com/mrdoob/three.js/pull/1602",
+            "remark" : "This PR mentioned a problem about adding precision qualifiers to resolve shader compilation errors on mobile device.\nThis is also a nasty problem which is platform-dependent"
+        },
+        {
+            "link": "http://stackoverflow.com/questions/4468329/gl-color-is-undeclared-identifier-on-webgl",
+            "source" : "stackoverflow",
+            "categories": ["Undeclared identifier"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/27544729/three-js-error-creating-webgl-context",
+            "source" : "stackoverflow",
+            "categories": ["Context management"],
+            "remark" : "[another `canvas.getContext(\"2d\")` occupied this canvas context.]"
+        },
+        {
+            "link": "http://stackoverflow.com/questions/25219352/webgl-scene-doest-render-because-of-lost-context",
+            "source" : "stackoverflow",
+            "categories": ["Context management"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/14943148/webgl-getattriblocation-no-object-shader-issue",
+            "source" : "stackoverflow",
+            "categories": ["Resource loading order"],
+            "remark" : "Try to render the scene before the shader program is downloaded and compiled"
+        },
+        {
+            "link": "http://stackoverflow.com/questions/33725228/webgl-fragment-shader-constructor-error-too-many-arguments",
+            "source" : "stackoverflow",
+            "categories": ["API usage error"],
+            "remark" : "WebGL Fragment Shader constructor error - Too many arguments"
+        },
+        {
+            "link": "http://stackoverflow.com/questions/28490041/webgl-vbo-error-in-firefox",
+            "source" : "stackoverflow",
+            "categories": ["API usage error"],
+            "remark" : "Where is your setup code"
+        },
+        {
+            "link": "http://stackoverflow.com/questions/32618792/webgl-error-when-attempting-to-get-color-data-from-vec4",
+            "source" : "stackoverflow",
+            "categories": ["API usage error"],
+            "remark" : "WebGL error when attempting to get color data from vec4"
+        },
+        {
+            "link": "http://stackoverflow.com/questions/26544800/simple-triangle-in-webgl",
+            "source" : "stackoverflow",
+            "categories": ["API usage error"],
+            "remark" : "API name typo"
+        },
+        {
+            "link": "http://stackoverflow.com/questions/21436678/what-is-wrong-with-this-webgl-code",
+            "source" : "stackoverflow",
+            "categories": ["API usage error"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/33057640/why-my-mutiple-animated-objects-are-not-displayed-by-my-code-webgl",
+            "source" : "stackoverflow",
+            "categories": ["API usage error"],
+            "remark" : "Because `createProgram` don\"t return anything"
+        },
+        {
+            "link": "http://stackoverflow.com/questions/19758786/webgl-keep-previous-object",
+            "source" : "stackoverflow",
+            "categories": ["API usage error"],
+            "remark" : "should be calling `gl.drawArrays()` once for every object that is currently on the screen"
+        },
+        {
+            "link": "http://stackoverflow.com/questions/17316171/webgl-drawarrays-attribs-not-setup-correctly",
+            "source" : "stackoverflow",
+            "categories": ["API usage error"],
+            "remark" : "have to create an array buffer for each object you are drawing"
+        },
+        {
+            "link": "http://stackoverflow.com/questions/32447641/what-is-common-cause-of-range-out-of-bounds-of-buffer-in-webgl",
+            "source" : "stackoverflow",
+            "categories": ["API usage error"],
+            "remark" : "3 reasons of failing to call `gl.drawElements`"
+        },
+        {
+            "link": "http://stackoverflow.com/questions/8900559/webgl-drawarrays-with-invalid-mode-is-not-generating-a-error",
+            "source" : "stackoverflow",
+            "categories": ["API usage error"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/15751791/webgl-drawelements-out-of-range",
+            "source" : "stackoverflow",
+            "categories": ["API usage error"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/31750163/webgl-failing-at-drawing-points-gldrawarrays-attempt-to-access-out-of-range",
+            "source" : "stackoverflow",
+            "categories": ["API usage error"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/14641618/webgl-invalid-value-attachshader-no-object-or-object-deleted-is-this-secretl",
+            "source" : "stackoverflow",
+            "categories": ["API usage error"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/34617490/why-doesnt-my-sphere-render-complete",
+            "source" : "stackoverflow",
+            "categories": ["API usage error"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/15751791/webgl-drawelements-out-of-range/15753839#15753839",
+            "source" : "stackoverflow",
+            "categories": ["API usage error"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/11998781/webgl-invalid-operation-useprogram/11998987#11998987",
+            "source" : "stackoverflow",
+            "categories": ["API usage error"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/32115328/type-canvasrenderingcontext2d-webglrenderingcontext-is-not-assignable-to-typ/32116589#32116589",
+            "source" : "stackoverflow",
+            "categories": ["API usage error"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/11216912/webgl-shader-errors/11217704#11217704",
+            "source" : "stackoverflow",
+            "categories": ["API usage error"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/21128464/what-will-happen-if-an-attribute-is-used-in-program-without-enabled-and-binding",
+            "source" : "stackoverflow",
+            "categories": ["API usage error"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/21200386/webgl-gl-error-gl-invalid-operation-gldrawelements-attempt-to-access-out-of/21212640#21212640",
+            "source" : "stackoverflow",
+            "categories": ["API usage error"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/20821486/how-to-debug-webgl-uncaught-type-error",
+            "source" : "stackoverflow",
+            "categories": ["Shader error"],
+            "remark" : "`uniform1i(3, 0)` Is not valid WebGL"
+        },
+        {
+            "link": "http://stackoverflow.com/questions/31690465/webgl-shaders-uncaught-syntax-error",
+            "source" : "stackoverflow",
+            "categories": ["Shader error"],
+            "remark" : "GLSL interpreted as javascript"
+        },
+        {
+            "link": "http://stackoverflow.com/questions/18500831/webgl-compileshader-syntax-error",
+            "source" : "stackoverflow",
+            "categories": ["Shader error"],
+            "remark" : "WebGL - compileShader syntax error"
+        },
+        {
+            "link": "http://stackoverflow.com/questions/11216912/webgl-shader-errors",
+            "source" : "stackoverflow",
+            "categories": ["Shader error"],
+            "remark" : "WebGL shader errors"
+        },
+        {
+            "link": "http://stackoverflow.com/questions/23724507/webgl-unable-to-initialize-shader-program",
+            "source" : "stackoverflow",
+            "categories": ["Shader error"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/20084865/google-chrome-webgl-shader-compile-linker-error-uniforms-with-the-same-name-but",
+            "source" : "stackoverflow",
+            "categories": ["Shader error"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/31520908/wrong-integer-math-in-webgl-shaders",
+            "source" : "stackoverflow",
+            "categories": ["Shader error"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/12755044/shader-compile-errors",
+            "source" : "stackoverflow",
+            "categories": ["Shader error"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/18815502/using-a-uniform-in-an-if-instruction-inside-a-fragment-shader-dont-work-since",
+            "source" : "stackoverflow",
+            "categories": ["Shader error"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/23724507/webgl-unable-to-initialize-shader-program/23740067#23740067",
+            "source" : "stackoverflow",
+            "categories": ["Shader error"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/31665132/gl-invalid-operation-caused-by-samplercube",
+            "source" : "stackoverflow",
+            "categories": ["Shader error"]
+        },
+        {
+            "link": "[Three.js: WebGL (error) drawing texture on a plane](http://stackoverflow.com/questions/24635753/three-js-webgl-error-drawing-texture-on-a-plane)",
+            "source" : "stackoverflow",
+            "categories": ["Threejs"]
+        },
+        {
+            "link": "[Normalize takes a vec3 not a vec4](http://stackoverflow.com/questions/14842857/normalize-function-in-webgl-not-working-three-js)",
+            "source" : "stackoverflow",
+            "categories": ["Threejs"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/29059306/three-js-webgl-invalid-operation-bindtexture-object-not-from-this-context",
+            "source" : "stackoverflow",
+            "categories": ["Threejs"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/30074972/canvas-renderer-not-working",
+            "source" : "stackoverflow",
+            "categories": ["Threejs"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/11359152/three-js-particlesystem-creation-gives-invalid-operation-not-bound-buffer-array",
+            "source" : "stackoverflow",
+            "categories": ["Threejs"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/26400009/webgl-get-error-warning-message-text-as-a-string",
+            "source" : "stackoverflow",
+            "categories": ["Others"],
+            "remark" : "WebGL: get error/warning message text as a string"
+        },
+        {
+            "link": "http://stackoverflow.com/questions/22666556/webgl-texture-creation-trouble",
+            "source" : "stackoverflow",
+            "categories": ["Others"],
+            "remark" : "WebGL texture creation trouble"
+        },
+        {
+            "link": "http://stackoverflow.com/questions/28604747/understanding-webgl-state",
+            "source" : "stackoverflow",
+            "categories": ["Others"],
+            "remark": "Understanding WebGL State"
+        },
+        {
+            "link": "http://stackoverflow.com/questions/19829244/problems-with-texture-array-sending-to-shaders-in-webgl",
+            "source" : "stackoverflow",
+            "categories": ["Others"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/31433319/webgl-rendering-an-float32array-of-a-lot-of-elements-showing-out-of-range-vertic",
+            "source" : "stackoverflow",
+            "categories": ["Others"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/21537721/array-buffer-not-working-with-webgl",
+            "source" : "stackoverflow",
+            "categories": ["Others"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/27524490/webgl-texture-is-not-showing-correctly/27525037#27525037",
+            "source" : "stackoverflow",
+            "categories": ["Others"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/26134077/passing-color-to-fragment-shader-from-javascript",
+            "source" : "stackoverflow",
+            "categories": ["Others"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/4009914/is-there-a-lint-tool-for-opengl-shading-language/4017112#4017112",
+            "source" : "stackoverflow",
+            "categories": ["Others"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/17035588/three-js-shader-extention-errors",
+            "source" : "stackoverflow",
+            "categories": ["Others"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/28747458/webgl-invalid-operation-vertexattribpointer-stride-or-offset-not-valid-for-ty",
+            "source" : "stackoverflow",
+            "categories": ["Type errors"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/10590819/webgl-glsl-shader-accessing-texture2d-overrides-other-texture/10592100#10592100",
+            "source" : "stackoverflow",
+            "categories": ["Type errors"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/31429591/webgl-code-not-working",
+            "source" : "stackoverflow",
+            "categories": ["Type errors"],
+            "remark" : "So finally it is a typing mistake"
+        },
+        {
+            "link": "http://stackoverflow.com/questions/14784427/webgl-using-gl-matrix-library-mat4-translate-not-running",
+            "source" : "stackoverflow",
+            "categories": ["Matrix related"]
+        },
+        {
+            "link": "http://stackoverflow.com/questions/17345432/square-doesnt-appear-using-perspective-matrix",
+            "source" : "stackoverflow",
+            "categories": ["Matrix related"]
+        }
+    ]
+}
