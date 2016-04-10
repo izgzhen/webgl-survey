@@ -1,0 +1,98 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{hyperref}
+\PassOptionsToPackage{usenames,dvipsnames}{color} % color is loaded by hyperref
+\hypersetup{unicode=true,
+            pdftitle={WebGL Survey},
+            pdfauthor={Zhen Zhang, Xingan Wang},
+            colorlinks=true,
+            linkcolor=blue,
+            citecolor=Blue,
+            urlcolor=blue,
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\usepackage{import}
+
+\title{WebGL Survey}
+\author{Zhen Zhang, Xingan Wang}
+\date{\today}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+The survey is trying to answer the questions based on collected facts
+and statistics:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  What is the best practice in programming WebGL programs?
+\item
+  What is the common pitfalls in programming WebGL programs?
+\end{enumerate}
+\end{abstract}
+
+\tableofcontents
+
+\newpage
+
+\part{Introduction} \subimport{intro/}{standard}
+\subimport{intro/}{apidoc} \subimport{intro/}{eco}
+\subimport{intro/}{apps} \newpage
+\part{Troubles and Trouble-Shooting} \subimport{bugs/}{overview}
+\subimport{bugs/}{mdn} \subimport{bugs/}{stackoverflow}
+\subimport{bugs/}{threejs} \subimport{bugs/}{apps}
+\subimport{bugs/}{trouble-shooting} \subimport{bugs/}{stats} \newpage
+\part{Library Support} \subimport{libs/}{overview}
+\subimport{libs/}{gl-matrix} \subimport{libs/}{threejs} \newpage
+\part{Tool Support} \subimport{tools/}{debug-tools}
+\subimport{tools/}{browser} \newpage
+\part{Conclusion} \subimport{conclusion/}{best-practice}
+\subimport{conclusion/}{future}
+
+\newpage
+
+\bibliography{main}\bibliographystyle{plain}
+
+\end{document}

@@ -23,6 +23,10 @@ Collected from the bugs in three.js sampling and stackoverflow sampling.
 * Matrix related: 2
 * Others: 10
 
-![](apperances.png)
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{apperances.png}
+\caption{Bug Apperance Statistics}
+\end{figure}
 
 

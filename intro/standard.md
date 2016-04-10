@@ -21,7 +21,11 @@ In DOM interfaces, the types and various object interfaces are introduced, in wh
 
 Here is a sample spec:
 
-![](webgl-spec.png)
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{webgl-spec.png}
+\caption{WebGL Specification Sample}
+\end{figure}
 
 ### OpenGL ES
 
@@ -29,7 +33,11 @@ The [OpenGL ES 2.0 spec](https://www.khronos.org/registry/gles/specs/2.0/es_full
 
 Here is a sample spec:
 
-![](opengl-spec.png)
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{opengl-spec.png}
+\caption{OpenGL Specification Sample}
+\end{figure}
 
 ### Example Implementation
 
@@ -40,7 +48,7 @@ As an example of implementation, we will see part of code in Firefox's Browser E
 * [`WebGLContextBuffers.cpp`](https://github.com/mozilla/gecko-dev/blob/7a82450687cc47dad34e3c89ca94cbd60bfd1aa6/dom/canvas/WebGLContextBuffers.cpp)
 
 ## Conformity status of popular implementations
-Older but more completed from [ref #1].
+Older but more completed from \cite{webglwiki}.
 
 ### Desktop browsers
 * Google Chrome – WebGL has been enabled on all platforms that have a capable graphics card with updated drivers since version 9, released in February 2011.
@@ -70,6 +78,6 @@ Older but more completed from [ref #1].
 
 ### More updated information
 
-You can check out the updated information in MDN [ref #2]
+You can check out the updated information in MDN \cite{webglmdn}.
 
 > Support for WebGL is present in Firefox 4+, Google Chrome 9+, Opera 12+, Safari 5.1+ and Internet Explorer 11+; however, the user's device must also have hardware that supports these features.

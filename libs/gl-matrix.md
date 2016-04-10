@@ -10,13 +10,25 @@ Exposed interfaces: `glMatrix`, `mat2`, `mat2d`, `mat3`, `mat4`, `quat`, `vec2`,
 
 ### [Common utilities](http://glmatrix.net/docs/2.2.0/symbols/glMatrix.html)
 
-![](gl-matrix.png)
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.5\textwidth]{gl-matrix.png}
+\caption{gl-matrix documentation sample 1}
+\end{figure}
 
 ### [3x3 Matrix](http://glmatrix.net/docs/2.2.0/symbols/mat3.html)
 
-![](mat3.png)
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.5\textwidth]{mat3.png}
+\caption{gl-matrix documentation sample 2}
+\end{figure}
 
-![](mat3-adjoint.png)
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.5\textwidth]{mat3-adjoint.png}
+\caption{gl-matrix documentation sample 3}
+\end{figure}
 
 
 ## Library structure

@@ -31,7 +31,7 @@ failure etc. in).
 
 
 ## GLSL errors
-Referencing the GLSL errors in IE [ref #8],
+Referencing the GLSL errors in IE \cite{glerrormsdn},
 we can divide GLSL errors further into:
 
 * Internal compiler error

@@ -1,5 +1,6 @@
 ---
-title: WebGL SE Survey author: Zhen Zhang, Xingan Wang
+title: WebGL Survey
+ author: Zhen Zhang, Xingan Wang
 date: \today
 abstract: |
     The survey is trying to answer the questions based on collected facts and statistics:
@@ -40,3 +41,8 @@ header-includes:
 \part{Conclusion}
     \subimport{conclusion/}{best-practice}
     \subimport{conclusion/}{future}
+
+\newpage
+\bibliography{main}
+\bibliographystyle{plain}
+

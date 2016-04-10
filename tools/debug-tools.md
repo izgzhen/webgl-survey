@@ -23,7 +23,11 @@ This tool looks very powerful and mature. Look at the features:
 
 One screen-shot:
 
-![](insight.jpeg)
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{insight.jpeg}
+\caption{WebGL Insight in Chrome}
+\end{figure}
 
 
 ## WebGL-Inspector
@@ -41,7 +45,11 @@ Features
 
 [Demo](http://benvanik.github.io/WebGL-Inspector/samples/lesson05/embedded.html)
 
-![](inspector.jpg)
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{inspector.jpg}
+\caption{WebGL Inspector}
+\end{figure}
 
 This is a very convenient debugger, it can be useful when you application's logic is wrong (compared to our analyzer's target -- the syntax and API is wrong).
 
