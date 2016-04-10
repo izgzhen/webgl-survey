@@ -1,4 +1,4 @@
-# 4.1 Exclusive Debug tools
+# Exclusive Debug tools
 
 > Some debugging tools for WebGL development are listed here.
 
@@ -23,7 +23,7 @@ This tool looks very powerful and mature. Look at the features:
 
 One screen-shot:
 
-![](https://camo.githubusercontent.com/a2d7ae628deeb8979d1a488bdb916de6b9b9ef62/687474703a2f2f692e696d6775722e636f6d2f327230795864342e6a7067)
+![](insight.jpeg)
 
 
 ## WebGL-Inspector
@@ -41,7 +41,7 @@ Features
 
 [Demo](http://benvanik.github.io/WebGL-Inspector/samples/lesson05/embedded.html)
 
-![](http://benvanik.github.io/WebGL-Inspector/images/screenshots/main.jpg)
+![](inspector.jpg)
 
 This is a very convenient debugger, it can be useful when you application's logic is wrong (compared to our analyzer's target -- the syntax and API is wrong).
 

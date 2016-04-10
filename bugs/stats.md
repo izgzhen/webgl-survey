@@ -1,4 +1,4 @@
-# 2.7 Statistics
+# Statistics
 
 Collected from the bugs in three.js sampling and stackoverflow sampling.
 

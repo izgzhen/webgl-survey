@@ -1,4 +1,4 @@
-# 2.4 Compiled Information from three.js
+# Compiled Information from three.js
 
 ## Overview
 * threejs-issue-5421: Buffer deallocation

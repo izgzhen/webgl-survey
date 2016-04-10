@@ -1,4 +1,4 @@
-# 3.2 Case study: gl-matrix
+# Case study: gl-matrix
 
 [Home](http://glmatrix.net)
 

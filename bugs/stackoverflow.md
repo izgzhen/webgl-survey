@@ -1,4 +1,4 @@
-# 2.3 Compiled Information from Stackoverflow
+# Compiled Information from Stackoverflow
 
 [Source](http://stackoverflow.com/search?q=WebGL)
 

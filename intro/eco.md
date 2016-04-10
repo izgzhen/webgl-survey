@@ -1,4 +1,4 @@
-# 1.3 Ecosystem
+# Ecosystem
 
 ## Books
 

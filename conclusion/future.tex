@@ -1,0 +1,33 @@
+\section{Future of WebGL tooling}\label{future-of-webgl-tooling}
+
+\subsection{Static analysis technique}\label{static-analysis-technique}
+
+The interoperation between JavaScript and GLSL opens a door for static
+analysis; Besides, editors and current IDE is unaware of if you have
+check \texttt{null}; The dynamic type information is simply ignored.
+
+Also, the correct use of API involves side-effects, which is easy to get
+wrong.
+
+\subsection{Verified libraries}\label{verified-libraries}
+
+Three.js is a huge code base, and highly dynamic. You never know if some
+feature does work or it is just coincidence.
+
+By verifying:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  The library does what it is intended to do
+\item
+  The library does its job the right way
+\end{enumerate}
+
+We will have more confidence and rely on it in the long run.
+
+\subsection{Integration}\label{integration}
+
+The integration into mature product is important, such as debug tools
+and IDEs.

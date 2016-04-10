@@ -1,4 +1,4 @@
-# 2.6 Trouble-shooting WebGL code
+# Trouble-shooting WebGL code
 
 ## *Professional WebGL Programming: Developing 3D Graphics for the Web*
 

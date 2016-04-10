@@ -1,0 +1,166 @@
+\section{Compiled Information from
+MDN}\label{compiled-information-from-mdn}
+
+Source: \href{https://developer.mozilla.org/en-US/docs/Web/API}{API},
+\href{https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/WebGL_best_practices}{Best
+Practices}
+
+\subsection{Source of bugs}\label{source-of-bugs}
+
+\subsubsection{canvas element}\label{canvas-element}
+
+To get the rendering context, i.e., the canvas element, we usually use
+\texttt{getElementById} or similar way to fetch the DOM object. The
+caveat is, the \texttt{id} is specified in HTML tag, such as
+
+\begin{verbatim}
+<canvas id="glcanvas" width="640" height="480">
+\end{verbatim}
+
+And you must use the exact name in your JavaScript code. \textbf{It is
+possible that you will type it wrongly or refer to another unrelated
+canvas}.
+
+\subsubsection{\texorpdfstring{\texttt{gl}
+Object}{gl Object}}\label{gl-object}
+
+\begin{verbatim}
+function initWebGL(canvas) {
+  gl = null;
+
+  try {
+    // Try to grab the standard context. If it fails, fallback to experimental.
+    gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+  }
+  catch(e) {}
+
+  // If we don't have a GL context, give up now
+  if (!gl) {
+    alert("Unable to initialize WebGL. Your browser may not support it.");
+    gl = null;
+  }
+
+  return gl;
+}
+\end{verbatim}
+
+First, we might not have a functional \texttt{gl} (not \texttt{null})
+always, which depends on the browser support. And second, in the
+\texttt{getContext}, we are also forced to consider two standards.
+
+\subsubsection{Shader's source}\label{shaders-source}
+
+The shader code is essentially a string. So as a result, you might
+either define it in JavaScript, or store it as a HTML element, or even
+request it as a resource dynamically from other address.
+
+\begin{verbatim}
+if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+  alert("Unable to initialize the shader program.");
+}
+\end{verbatim}
+
+The above snippet checks if the \texttt{gl.linkProgram} calling succeeds
+by checking if return value is \texttt{null}. It is apparently something
+easy to forget.
+
+\subsubsection{Attribute names}\label{attribute-names}
+
+The shader code will use some variable to communicate with JavaScript.
+For example
+
+\begin{verbatim}
+<script id="shader-vs" type="x-shader/x-vertex">
+  attribute vec3 aVertexPosition;
+
+  uniform mat4 uMVMatrix;
+  uniform mat4 uPMatrix;
+
+  void main(void) {
+    gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+  }
+</script>
+\end{verbatim}
+
+On the JavaScript side, we have to
+
+\begin{verbatim}
+// During Shader initialization
+vertexPositionAttribute = gl.getAttribLocation(shaderProgram, "aVertexPosition");
+gl.enableVertexAttribArray(vertexPositionAttribute);
+
+// During scene rendering
+var pUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
+gl.uniformMatrix4fv(pUniform, false, new Float32Array(perspectiveMatrix.flatten()));
+
+var mvUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+gl.uniformMatrix4fv(mvUniform, false, new Float32Array(mvMatrix.flatten()));
+
+gl.bindBuffer(gl.ARRAY_BUFFER, squareVerticesBuffer);
+gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0);
+\end{verbatim}
+
+So, we have to match the names (i.e. \texttt{aVertexPosition},
+\texttt{uPMatrix} and \texttt{uMVMatrix} in the above example) in two
+language domains, both in syntax and semantics.
+
+\subsubsection{Array}\label{array}
+
+This is how to fill data into GL buffer:
+\texttt{gl.bufferData(gl.ELEMENT\_ARRAY\_BUFFER,\ new\ Uint16Array(cubeVertexIndices),\ gl.STATIC\_DRAW);}
+
+The \texttt{Uint16Array} is a raw, platform-dependent way of storing an
+array of data. Similarly, we also have \texttt{Array},
+\texttt{Int8Array}, \texttt{Float32Array} \ldots{}
+
+Interestingly, let compare it with OpenGL ES interface:
+\texttt{void\ BufferData(\ enum\ target,\ sizeiptr\ size,\ const\ void\ *data,\ enum\ usage\ );}.
+
+You can see that, the \texttt{Uint16} array could be translated into a
+raw array and a element size indicator.
+
+\subsection{Things to avoid}\label{things-to-avoid}
+
+\begin{itemize}
+\tightlist
+\item
+  You should never use \texttt{\#ifdef\ GL\_ES} in your WebGL shaders;
+  although some early examples used this, it's not necessary, since this
+  condition is always true in WebGL shaders.
+\item
+  Using \texttt{high} precision in fragment shaders will prevent your
+  content from working on some older mobile hardware. You can use
+  \texttt{medium} instead, but be aware that this often results in
+  corrupted rendering due to lack of precision on most mobile devices,
+  and the corruption is not going to be visible on a typical desktop
+  computer. In general, only using \texttt{high} in both vertex and
+  fragment shaders is safer unless shaders are thoroughly tested on a
+  variety of platforms. Starting in Firefox 11, the WebGL
+  \texttt{getShaderPrecisionFormat()} function is implemented, allowing
+  you to check if \texttt{high} precision is supported, and more
+  generally letting you query the actual precision of all supported
+  precision qualifiers.
+\item
+  Anything that requires syncing the CPU and GPU sides is potentially
+  very slow, so if possible you should try to avoid doing that in your
+  main rendering loops. This includes the following WebGL calls:
+  \texttt{getError()}, \texttt{readPixels()}, and \texttt{finish()}.
+  WebGL getter calls such as \texttt{getParameter()} and
+  \texttt{getUniformLocation()} should be considered slow too, so try to
+  cache their results in a JavaScript variable.
+\item
+  Simpler shaders perform better than complex ones. In particular, if
+  you can remove an \texttt{if} statement from a shader, that will make
+  it run faster. Division and math functions like \texttt{log()} should
+  be considered expensive too.
+\item
+  Always have vertex attrib 0 array enabled. If you draw with vertex
+  attrib 0 array disabled, you will force the browser to do complicated
+  emulation when running on desktop OpenGL (e.g.~on Mac OS X). This is
+  because in desktop OpenGL, nothing gets drawn if vertex attrib 0 is
+  not array-enabled. You can use \texttt{bindAttribLocation()} to force
+  a vertex attribute to use location 0, and use
+  \texttt{enableVertexAttribArray()} to make it array-enabled.
+\end{itemize}
+
+​

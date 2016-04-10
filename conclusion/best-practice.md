@@ -1,5 +1,4 @@
-# 5.1 Best practices in WebGL development
-
+# Best practices in WebGL development
 
 ## General ones
 

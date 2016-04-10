@@ -1,0 +1,274 @@
+\section{Overview}\label{overview}
+
+\subsection{Categories}\label{categories}
+
+In typical WebGL applications, we might have following kinds of errors
+(only the ones which \emph{will} happen every time, we don't count the
+resource loading failure etc. in).
+
+\begin{itemize}
+\tightlist
+\item
+  GLSL
+\item
+  Typo
+\item
+  unexpected parameter
+\item
+  Buffer not bound
+\item
+  GLSL
+\item
+  Resource deallocation
+\item
+  Lack of certain step
+\item
+  Buffer deallocation
+\item
+  Type error
+\item
+  Memory leak
+\item
+  Improper sharing
+\item
+  missing properties
+\item
+  Name not in scope
+\item
+  Undeclared identifier
+\item
+  Context management
+\item
+  Resource loading order
+\item
+  API usage error
+\item
+  Shader error
+\item
+  Threejs
+\item
+  Type errors
+\item
+  Matrix related
+\item
+  Others
+\end{itemize}
+
+\subsection{GLSL errors}\label{glsl-errors}
+
+Referencing the GLSL errors in IE {[}ref \#8{]}, we can divide GLSL
+errors further into:
+
+\begin{itemize}
+\tightlist
+\item
+  Internal compiler error
+\item
+  Compiler memory error - shader exceeds x bytes
+\item
+  Syntax error - x
+\item
+  Undeclared identifier x
+\item
+  Invalid arguments passed to function x
+\item
+  Postfix expression cannot be indexed
+\item
+  Index out of range
+\item
+  Incompatible index expression. For non-uniforms, the index must be an
+  expression formed of the loop\_index and integer constants. For
+  uniforms, the index must be an integer constant.
+\item
+  Index must be a constant
+\item
+  Argument x is not a sampler
+\item
+  Invalid macro name - cannot start with \texttt{GL\_} or contain
+  \texttt{\_\_}
+\item
+  Incompatible types in expression
+\item
+  Expression in if statement does not evaluate to a boolean
+\item
+  Divide or mod by zero in constant expression
+\item
+  Invalid parameter count for macro
+\item
+  Maximum uniform vector count exceeded
+\item
+  Maximum attribute vector count exceeded
+\item
+  Maximum varying vector count exceeded
+\item
+  Maximum shader complexity exceeded
+\item
+  Identifier already declared
+\item
+  Invalid character used outside of comment
+\item
+  Invalid initializer in for loop, needs to be a single variable of type
+  float or int and initialized to a constant
+\item
+  Invalid condition in for loop, needs to be in form
+  \texttt{loop\_index\ \{\ \&gt;\ \textbar{}\ \&gt;=\ \textbar{}\ \&lt;\ \textbar{}\ \&lt;=\ \textbar{}\ ==\ \textbar{}\ !=\ \}\ constant}
+\item
+  Invalid iteration in for loop, needs to be in form
+  \texttt{\{\ -\/-loop\_index\ \textbar{}\ ++loop\_index\ \textbar{}\ loop\_index++\ \textbar{}\ loop\_index-\/-\ \textbar{}\ loop\_index+=constant\ \textbar{}\ loop\_index-=constant\ \}}
+\item
+  Invalid modification to loop index inside loop body
+\item
+  Invalid identifier name - cannot start with \texttt{gl\_},
+  \texttt{webgl\_}, \texttt{\_webgl\_} or contain \texttt{\_\_}
+\item
+  Token exceeds maximum length
+\item
+  Invalid qualifier on array - cannot make arrays of attribute or const
+  variables
+\item
+  Incompatible type used for return expression
+\item
+  Invalid qualifier on sampler variable declaration - must be uniform
+\item
+  Invalid type passed to matrix constructor - arguments must be a
+  matrix, or a scalar / vector of float / int / bool
+\item
+  Invalid type passed to componentwise vector or matrix constructor -
+  arguments must be a scalar / vector of float / int / bool
+\item
+  Invalid argument count in componentwise vector or matrix constructor -
+  total components passed must equal vector or matrix size
+\item
+  Invalid expression on left of assignment expression
+\item
+  Invalid swizzle in field selection - swizzle component count must be
+  equal or less than max vector size (4)
+\item
+  Invalid swizzle in field selection - swizzle components must be all
+  from same set (xyzw, rgba or stpq)
+\item
+  Invalid swizzle component in field selection - must be from a valid
+  GLSL set (xyzw, rgba or stpq)
+\item
+  Swizzle component out of range - must select a component that exists
+  in the vector
+\item
+  This hardware is unable to support \texttt{gl\_FrontFacing}
+\item
+  Const variable requires initialization
+\item
+  Variables declared with uniform, attribute, or varying qualifier
+  cannot be initialized
+\item
+  Varying variable cannot have bool, int, or struct type
+\item
+  Invalid argument passed to constructor - argument must be a basic GLSL
+  type
+\item
+  Invalid type qualifier for function parameter - only const on in
+  parameters is allowed
+\item
+  Array declarator requires a constant expression
+\item
+  Array was declared with size less than or equal to zero
+\item
+  Type qualifiers \texttt{uniform} and \texttt{attribute} are invalid
+  for structs
+\item
+  Invalid field name for struct type
+\item
+  Invalid type for left hand side of field selection
+\item
+  Samplers are not allowed in structs
+\item
+  Macros must be redefined the same as original definition
+\item
+  Invalid loop index expression passed as out / inout parameter
+\item
+  Type cannot be used as a constructor
+\item
+  Undeclared type x
+\item
+  Embedded struct declarations are not allowed
+\item
+  Function x is declared and used but not defined
+\item
+  Function redefinition not allowed
+\item
+  Function redeclaration not allowed
+\item
+  Invalid single argument to vector constructor - must be a scalar type,
+  or another vector, or a 2x2 matrix
+\item
+  Struct constructor arguments' types do not match the struct's field
+  types
+\item
+  Invalid location for continue statment - must be inside of a loop
+\item
+  Cannot call main
+\item
+  Invalid qualifier on non-global variable - non-global variables can be
+  const but cannot be varying, attribute or invariant
+\item
+  Cannot redefine main or define main with incorrect signature
+\item
+  Cannot use reserved operators such as \texttt{\textasciitilde{}},
+  \texttt{\%=}, \texttt{\&gt;\&gt;=}, \texttt{\&lt;\&lt;=},
+  \texttt{\&amp;=}, \texttt{\textbar{}=}, or \texttt{\^{}=}
+\item
+  Ternary conditional operator must have boolean expression for test
+  condition
+\item
+  Ternary conditional operator must have two expressions of equal types
+  after test condition
+\item
+  Invalid location for break statement - break statements must be inside
+  a loop
+\item
+  Invalid location for discard statement - discard statements must be
+  inside a fragment shader
+\item
+  Initializer for const variable must initialize to a constant value
+\item
+  Functions cannot be overloaded on return type
+\item
+  Known functions cannot be re-declared or re-defined
+\item
+  Function header definition parameter qualifiers must match declaration
+  parameter qualifiers
+\item
+  Array size must be an integer constant expression
+\item
+  Array size expression too complex
+\item
+  \texttt{\#version} directive must specify 100 for version
+\item
+  \texttt{\#version} directive can only be preceded by whitespace or
+  comments
+\item
+  Unary operator not defined for type
+\item
+  Struct declarations are disallowed in function parameter declarators
+\item
+  Struct type declaration exceeds maximum nesting level of
+\item
+  Operator not defined for struct types
+\item
+  Operator not defined for user-defined types that contain array types
+\item
+  Unknown extension: x
+\item
+  Invalid behavior specified for extension - behavior must be require,
+  warn, enable or disable for regular extensions, or warn or disable for
+  \texttt{all}
+\item
+  Required extension x is not supported
+\item
+  Preprocessor directives can only be preceded by whitespace on a line
+\item
+  Function declarations cannot be local
+\item
+  Variable declared as type void is not allowed
+\item
+  `void' is an invalid parameter type unless used as \texttt{(void)}
+\end{itemize}

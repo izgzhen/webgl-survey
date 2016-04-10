@@ -1,4 +1,4 @@
-# 2.5 Compiled Information from applications
+# Compiled Information from applications
 
 NOTE: needs more feedback from community
 

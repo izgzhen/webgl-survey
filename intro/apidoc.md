@@ -1,4 +1,4 @@
-# 1.2 Online API documentation
+# Online API documentation
 
 > The junior developer read books and tutorials;
 The senior developers read the API documentation;

@@ -1,4 +1,4 @@
-# 1.4 Applications
+# Applications
 
 ## Examples
 * [NASA: Exploring Curiosity](http://eyes.nasa.gov/curiosity/)

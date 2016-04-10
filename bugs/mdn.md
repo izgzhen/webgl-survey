@@ -1,4 +1,4 @@
-# 2.2 Compiled Information from MDN
+# Compiled Information from MDN
 
 Source: [API](https://developer.mozilla.org/en-US/docs/Web/API), [Best Practices](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/WebGL_best_practices)
 
@@ -95,7 +95,8 @@ This is how to fill data into GL buffer: `gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,
 
 The `Uint16Array` is a raw, platform-dependent way of storing an array of data. Similarly, we also have `Array`, `Int8Array`, `Float32Array` ...
 
-Interestingly, let compare it with OpenGL ES interface: `void BufferData( enum target, sizeiptr size, constvoid *data, enum usage );`.
+Interestingly, let compare it with OpenGL ES interface: `void BufferData( enum target, sizeiptr size, const
+void *data, enum usage );`.
 
 You can see that, the `Uint16` array could be translated into a raw array and a element size indicator.
 

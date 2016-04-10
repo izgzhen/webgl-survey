@@ -1,4 +1,4 @@
-# 1.1 WebGL and OpenGL standard
+# WebGL and OpenGL standard
 
 ## Evolving of the standards
 The publication and draft dates of WebGL specification:

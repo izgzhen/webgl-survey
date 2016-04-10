@@ -1,4 +1,4 @@
-# 4.2 Browser Support and IDE Support
+# Browser Support and IDE Support
 
 ## Browser
 

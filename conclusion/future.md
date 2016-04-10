@@ -1,4 +1,4 @@
-# 5.2 Future of WebGL tooling
+# Future of WebGL tooling
 
 ## Static analysis technique
 The interoperation between JavaScript and GLSL opens a door for static analysis;
